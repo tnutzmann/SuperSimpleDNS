@@ -1,0 +1,30 @@
+upstream: "8.8.8.8:53"
+
+zones:
+  - name: "example.com."
+    A:
+      - "127.0.0.1"
+    AAAA:
+      - "::1"
+    TXT:
+      - "\"hello world\""
+    MX:
+      - "10 mail.example.com."
+    NS:
+      - "ns1.example.com."
+    SOA:
+      "ns1.example.com. admin.example.com. 2025041801 7200 3600 1209600 3600"
+  
+  - name: "sub.example.com."
+    A:
+      - "127.0.0.2"
+    AAAA:
+      - "::1"
+    TXT:
+      - "\"hello world\""
+    MX:
+      - "10 mail.example.com."
+    NS:
+      - "ns1.example.com."
+    SOA:
+      "ns1.example.com. admin.example.com. 2025041801 7200 3600 1209600 3600"

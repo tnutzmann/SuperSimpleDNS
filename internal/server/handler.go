@@ -8,13 +8,11 @@ import (
 	"github.com/tnutzmann/SuperSimpleDNS/internal/resolver"
 )
 
-var zones = []config.Zone{
-	config.Zone{Name: "example.com.", A: []string{"127.0.0.1", "127.0.0.2"}, AAAA: []string{"::1"}},
-}
+var configuration config.Config = *readConfig()
 
 var resolvers = []resolver.Resolver{
-	&resolver.LocalResolver{Zones: zones},
-	&resolver.UpstreamResolver{UpstreamAddress: "8.8.8.8:53"},
+	&resolver.LocalResolver{Zones: configuration.Zones},
+	&resolver.UpstreamResolver{UpstreamAddress: configuration.Upstream},
 }
 
 func handleDNSRequest(writer dns.ResponseWriter, msg *dns.Msg) {
@@ -37,6 +35,14 @@ func handleDNSRequest(writer dns.ResponseWriter, msg *dns.Msg) {
 	if err := writer.WriteMsg(&reply); err != nil {
 		log.Printf("Failed to write DNS response: %v", err)
 	}
+}
+
+func readConfig() *config.Config {
+	con, err := config.LoadConfigFromFile("./zones.yaml")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return con
 }
 
 func failureResponse(writer dns.ResponseWriter, msg *dns.Msg) {
