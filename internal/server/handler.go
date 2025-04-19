@@ -4,11 +4,16 @@ import (
 	"log"
 
 	"github.com/miekg/dns"
+	"github.com/tnutzmann/SuperSimpleDNS/internal/config"
 	"github.com/tnutzmann/SuperSimpleDNS/internal/resolver"
 )
 
+var zones = []config.Zone{
+	config.Zone{Name: "example.com.", A: []string{"127.0.0.1", "127.0.0.2"}, AAAA: []string{"::1"}},
+}
+
 var resolvers = []resolver.Resolver{
-	&resolver.LocalResolver{},
+	&resolver.LocalResolver{Zones: zones},
 	&resolver.UpstreamResolver{UpstreamAddress: "8.8.8.8:53"},
 }
 
